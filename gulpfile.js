@@ -13,6 +13,7 @@ var webpack = require('webpack');
 var webpackStream = require('webpack-stream');
 var babelLoader = require('babel-loader');
 var livereload = require('tiny-lr')();
+var htmlMin = require('gulp-htmlmin');
 
 var webpackConfig = require('./webpack.config');
 
@@ -92,6 +93,10 @@ gulp.task('watch', function () {
   ], ['scripts']);
 
   gulp.watch([
+    './client/components/**/*.html'
+  ], ['templates']);
+
+  gulp.watch([
     './public/styles/app.css',
     './public/scripts/app.js'
   ], notifyLiveReload);
@@ -102,16 +107,15 @@ gulp.task('watch', function () {
   ], ['libraries.js', 'libraries.css']);
 });
 
-gulp.task('server', function () {
-  require('gulp-connect').server({
-    root: './public',
-    port: config.get('app.port') || 3000
-  })
+gulp.task('templates', function () {
+  return gulp.src('./client/components/**/*.html')
+    .pipe(htmlMin({ collapseWhitespace: true }))
+    .pipe(gulp.dest('./public/views'));
 });
 
 /**
  * Main tasks
  */
 gulp.task('default', ['dev']);
-gulp.task('build', ['libraries.js', 'libraries.css', 'scripts.build', 'styles.build']);
-gulp.task('dev', ['libraries.js', 'libraries.css', 'scripts', 'styles', 'watch']);
+gulp.task('build', ['libraries.js', 'libraries.css', 'templates', 'scripts.build', 'styles.build']);
+gulp.task('dev', ['libraries.js', 'libraries.css', 'templates', 'scripts', 'styles', 'watch']);

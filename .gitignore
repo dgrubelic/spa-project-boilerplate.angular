@@ -1,3 +1,8 @@
 node_modules
 bower_components
+public/views
+public/scripts/app.js
+public/scripts/libs.js
+public/styles/app.css
+public/styles/libs.css
 config/local.json
