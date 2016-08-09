@@ -1,9 +1,10 @@
 'use strict';
-const CSS_CLASSES = require('./config');
+const indexModule = angular.module('index', []);
 
-// Listen to document.ready event
-$(document).ready(onDocumentReady);
+indexModule.controller('IndexComponentController', require('./index.controller'));
+indexModule.component('indexComponent', {
+  templateUrl: 'views/index/index.html',
+  controller: 'IndexComponentController'
+});
 
-function onDocumentReady() {
-  console.log('Index component loaded');
-}
+module.exports = indexModule;
