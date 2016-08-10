@@ -14,6 +14,7 @@ var webpackStream = require('webpack-stream');
 var babelLoader = require('babel-loader');
 var livereload = require('tiny-lr')();
 var htmlMin = require('gulp-htmlmin');
+var ngAnnotate = require('gulp-ng-annotate');
 
 var webpackConfig = require('./webpack.config');
 
@@ -69,12 +70,14 @@ gulp.task('scripts', function () {
 
   return gulp.src('./client/app.js')
     .pipe(webpackStream( webpackConfig ))
+    .pipe(ngAnnotate())
     .pipe(gulp.dest('./public/scripts/'))
 });
 
 gulp.task('scripts.build', function () {
   return gulp.src('./client/app.js')
     .pipe(webpackStream( webpackConfig ))
+    .pipe(ngAnnotate())
     .pipe(uglify())
     .pipe(gulp.dest('./public/scripts/'));
 });
