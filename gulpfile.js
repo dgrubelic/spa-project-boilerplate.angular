@@ -4,6 +4,7 @@ var path = require('path');
 var gulp = require('gulp');
 var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
+var autoprefixer = require('gulp-autoprefixer');
 var uglifycss = require('gulp-uglifycss');
 var mainBowerFiles = require('gulp-main-bower-files');
 var concat = require('gulp-concat');
@@ -75,6 +76,9 @@ gulp.task('styles', function () {
     .pipe(plumber(errorHandler))
     .pipe(sourcemaps.init())
     .pipe(sass({ errLogToConsole: true }).on('error', sass.logError))
+    .pipe(autoprefixer({
+      browsers: ['last 2 versions', 'ie >= 9']
+    }))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./public/styles'))
 });
@@ -84,6 +88,9 @@ gulp.task('styles.build', function () {
     .on('error', errorHandler)
     .pipe(plumber(errorHandler))
     .pipe(sass().on('error', sass.logError))
+    .pipe(autoprefixer({
+      browsers: ['last 2 versions', 'ie >= 9']
+    }))
     .pipe(uglifycss())
     .pipe(gulp.dest('./public/styles/'));
 });
@@ -100,6 +107,8 @@ gulp.task('scripts', function () {
 });
 
 gulp.task('scripts.build', function () {
+  webpackConfig.watch = false;
+
   return gulp.src('./client/app.js')
     .on('error', errorHandler)
     .pipe(plumber(errorHandler))

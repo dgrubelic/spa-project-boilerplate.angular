@@ -8,7 +8,7 @@ const path = require('path');
 const app = express();
 
 // middleware
-if (config.has('app.livereload.port')) {
+if (config.get('app.debug')) {
   debug('Starting livereload server at port ' + config.get('app.livereload.port'));
   app.use(require('connect-livereload')({
     port: config.get('app.livereload.port')
@@ -19,6 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressSpa('index.html', { root: path.join(__dirname, 'public') }))
 app.use(function (err, req, res, next) {
   console.error(err);
+  next(err);
 });
 
 // Start server
