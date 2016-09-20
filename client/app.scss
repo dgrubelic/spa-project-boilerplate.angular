@@ -2,7 +2,7 @@ html {
   font-size: 100%;
 }
 
-html * {  
+html * {
   margin: 0;
   padding: 0;
 }
@@ -18,6 +18,8 @@ body {
 ul {
   padding: .5rem 2rem;
 }
+
+$some-error-var: 12px;
 
 h1, h2, h3, h4, h5, h6 {
   font-weight: 300;

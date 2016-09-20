@@ -9,6 +9,7 @@ var mainBowerFiles = require('gulp-main-bower-files');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var gulpFilter = require('gulp-filter');
+var plumber = require('gulp-plumber');
 var webpack = require('webpack');
 var webpackStream = require('webpack-stream');
 var babelLoader = require('babel-loader');
@@ -18,6 +19,20 @@ var ngAnnotate = require('gulp-ng-annotate');
 
 var webpackConfig = require('./webpack.config');
 
+/**
+ * Default error handler
+ * @param  {Object} err Error object
+ * @return {void}
+ */
+function errorHandler(err) {
+  console.error(err);
+}
+
+/**
+ * Live reload trigger
+ * @param  {Object} event Event
+ * @return {void}
+ */
 function notifyLiveReload(event) {
   var fileName = require('path').relative(__dirname, event.path);
   fileName = fileName.replace('public/', '');
@@ -33,6 +48,8 @@ function notifyLiveReload(event) {
 gulp.task('libraries.js', function () {
   var filterJS = gulpFilter('**/*.js', { restore: true });
   gulp.src('./bower.json')
+    .on('error', errorHandler)
+    .pipe(plumber(errorHandler))
     .pipe(mainBowerFiles())
     .pipe(filterJS)
     .pipe(concat('libs.js'))
@@ -43,6 +60,8 @@ gulp.task('libraries.js', function () {
 gulp.task('libraries.css', function () {
   var filterCSS = gulpFilter('**/*.css', { restore: true });
   gulp.src('./bower.json')
+    .on('error', errorHandler)
+    .pipe(plumber(errorHandler))
     .pipe(mainBowerFiles())
     .pipe(filterCSS)
     .pipe(concat('libs.css'))
@@ -52,14 +71,18 @@ gulp.task('libraries.css', function () {
 
 gulp.task('styles', function () {
   gulp.src('./client/app.scss')
+    .on('error', errorHandler)
+    .pipe(plumber(errorHandler))
     .pipe(sourcemaps.init())
-    .pipe(sass().on('error', sass.logError))
+    .pipe(sass({ errLogToConsole: true }).on('error', sass.logError))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./public/styles'))
 });
 
 gulp.task('styles.build', function () {
   return gulp.src('./client/components/app.scss')
+    .on('error', errorHandler)
+    .pipe(plumber(errorHandler))
     .pipe(sass().on('error', sass.logError))
     .pipe(uglifycss())
     .pipe(gulp.dest('./public/styles/'));
@@ -69,6 +92,8 @@ gulp.task('scripts', function () {
   webpackConfig.watch = true;
 
   return gulp.src('./client/app.js')
+    .on('error', errorHandler)
+    .pipe(plumber(errorHandler))
     .pipe(webpackStream( webpackConfig ))
     .pipe(ngAnnotate())
     .pipe(gulp.dest('./public/scripts/'))
@@ -76,6 +101,8 @@ gulp.task('scripts', function () {
 
 gulp.task('scripts.build', function () {
   return gulp.src('./client/app.js')
+    .on('error', errorHandler)
+    .pipe(plumber(errorHandler))
     .pipe(webpackStream( webpackConfig ))
     .pipe(ngAnnotate())
     .pipe(uglify())

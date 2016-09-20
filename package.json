@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "DEBUG=app:* parallelshell \"node-dev index.js\" \"gulp dev\"",
-    "dev.spa": "DEBUG=app:* parallelshell \"node-dev server.spa.js\" \"gulp dev\"",
+    "start": "DEBUG=app:* parallelshell \"./node_modules/.bin/gulp build\" \"node index.js\"",
+    "dev": "DEBUG=app:* parallelshell \"node-dev index.js\" \"./node_modules/.bin/gulp dev\"",
+    "dev.spa": "DEBUG=app:* parallelshell \"node-dev server.spa.js\" \"./node_modules/.bin/gulp dev\"",
     "postinstall": "./node_modules/.bin/bower install && ./node_modules/.bin/gulp build"
   },
   "author": "Davor Grubelić <davor.grubelic@gmail.com>",
@@ -31,6 +32,7 @@
     "gulp-htmlmin": "^2.0.0",
     "gulp-main-bower-files": "^1.5.2",
     "gulp-ng-annotate": "^2.0.0",
+    "gulp-plumber": "^1.1.0",
     "gulp-sass": "^2.3.2",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^2.0.0",
